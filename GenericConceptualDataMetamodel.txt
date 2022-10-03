@@ -1,0 +1,64 @@
+/*
+ *  air flights management platform running example expressed in the GDM language
+ */
+ /***********************/
+/* Entities definition */
+/***********************/
+entity Aircraft {
+  id registrationNumber unique
+  modelNumber text
+  manufacturer text
+  capacity int
+  ref Flight[*] supportedFlights
+}
+
+entity Flight {
+  id code unique
+  departureTime time
+  arrivalTime time
+  departureTime date
+  arrivalTime date
+  ref Localization[*] registeredPosition
+  ref WebSiteAccess[*] sitesAccessed
+  ref Passenger[*] registeredPersons
+  ref Aircraft[1] responsibleAircraft
+  ref Airport[1] origin
+  ref Airport[1] destination
+}
+
+entity Passenger {
+  id idPassport unique
+  firstname text
+  lastname text
+  birthday date
+  sex text
+  nationality text
+  ref Flight[*] flights
+  ref WebSiteAccess[*] accessedSites
+}
+
+
+entity Airport {
+  id codeICAO unique
+  nameAirport text
+  city text
+  country text
+  nationality text
+  ref Flight[*] landedflights
+  ref Flight[*] departedflights
+}
+
+entity Localization {
+  timeLocaliz time
+  dateLocaliz date
+  latitude text
+  longitude text
+  ref Flight[1] inFlight
+}
+
+entity WebSiteAccess {
+  timeAccess time
+  dateAccess date
+  ref Flight[1] relatedFlight
+  ref Passenger[1] requests
+}
