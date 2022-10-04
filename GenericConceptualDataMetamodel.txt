@@ -21,7 +21,7 @@ entity Flight {
   ref Localization[*] registeredPosition
   ref WebSiteAccess[*] sitesAccessed
   ref Passenger[*] registeredPersons
-  ref Aircraft[1] responsibleAircraft
+  ref Aircraft[1] usedAircraft
   ref Airport[1] origin
   ref Airport[1] destination
 }
