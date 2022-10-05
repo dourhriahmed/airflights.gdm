@@ -91,27 +91,34 @@ INCLUDE Passenger.flights as FL,Passenger.flights.Origin as OriginAirport
 WHERE FL.departureDate="?" and OriginAirport.country="?"
 ORDER BY OriginAirport.city ASC,FL.departureTime ASC
 
-Query Q5_webAccessesOfGivenFlight:
+Query Q5_passengersDepartingGivenPeriod:
+SELECT OriginAirport.country,OriginAirport.city,idPassport,firstName,lastName,birthday,sex,nationality
+FROM Passenger
+INCLUDE Passenger.flights as FL,Passenger.flights.Origin as OriginAirport
+WHERE FL.departureTime>="?" and FL.departureDate>="?" and FL.departureTime<="?" and FL.departureDate<="?"
+ORDER BY OriginAirport.country ASC,OriginAirport.city ASC
+
+Query Q6_webAccessesOfGivenFlight:
 SELECT P.idPassport,P.firstName,P.lastName,access.timeAccess
 FROM Flight
 INCLUDE Flight.registeredPersons as P,Flight.registeredPersons.accessedSites as access
 WHERE code="?"
 ORDER BY P.idPassport ASC,access.timeAccess DESC
 
-Query Q6_aircraftsDepartedGivenAirport:
+Query Q7_aircraftsDepartedGivenAirport:
 SELECT registrationNumber,modelNumber,manufacturer,capacity,FL.departureDate,FL.departureTime
 FROM Aircraft
 INCLUDE Aircraft.supportedFlights as FL,Aircraft.supportedFlights.Origin as A
 WHERE FL.departureTime>="?" and FL.departureDate>="?" and FL.departureTime<="?" and FL.departureDate<="?" and A.codeICAO="?"
 
-Query Q7_localizationAircraft:
+Query Q8_localizationAircraft:
 SELECT AC.registrationNumber,AC.modelNumber,POS.latitude,POS.longitude,POS.timeLocaliz,POS.dateLocaliz
 FROM Flight
 INCLUDE Flight.registeredPositions as POS,Flight.usedAirCraft as AC
 WHERE Flight.code="?"
 ORDER BY POS.dateLocaliz DESC,POS.timeLocaliz DESC
 
-Query Q8_monitoringAircraftsFlightsLevels:
+Query Q9_monitoringAircraftsFlightsLevels:
 SELECT code,level,ORIGIN.city,DESTINATION.city
 FROM Flight
 INCLUDE Flight.Origin as ORIGIN,Flight.Destination as DESTINATION
