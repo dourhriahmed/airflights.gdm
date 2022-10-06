@@ -84,19 +84,20 @@ FROM Passenger
 INCLUDE Passenger.flights as FL
 WHERE FL.code="?"
 
-Query Q4_passengersDepartingGivenCountry:
-SELECT OriginAirport.city,FL.departureTime,idPassport,firstName,lastName,birthday,sex,nationality
+query Q4_passengersDepartingGivenCountry:
+SELECT Origin.city as originCity,Destination.city as destinationCity,FL.departureTime,idPassport,firstName,lastName,birthday,sex,nationality
 FROM Passenger
-INCLUDE Passenger.flights as FL,Passenger.flights.Origin as OriginAirport
-WHERE FL.departureDate="?" and OriginAirport.country="?"
-ORDER BY OriginAirport.city ASC,FL.departureTime ASC
+INCLUDE Passenger.flights as FL,Passenger.flights.Origin as Origin,Passenger.flights.Destination as Destination
+WHERE FL.departureDate="?" and Origin.country="?"
+ORDER BY Origin.city ASC,FL.departureTime ASC
+
 
 Query Q5_passengersDepartingGivenPeriod:
-SELECT OriginAirport.country,OriginAirport.city,idPassport,firstName,lastName,birthday,sex,nationality
+SELECT Origin.country as originCountry,Origin.city as originCity,FL.code,idPassport,firstName,lastName,birthday,sex,nationality
 FROM Passenger
-INCLUDE Passenger.flights as FL,Passenger.flights.Origin as OriginAirport
+INCLUDE Passenger.flights as FL,Passenger.flights.Origin as Origin
 WHERE FL.departureTime>="?" and FL.departureDate>="?" and FL.departureTime<="?" and FL.departureDate<="?"
-ORDER BY OriginAirport.country ASC,OriginAirport.city ASC
+ORDER BY Origin.country ASC,Origin.city ASC
 
 Query Q6_webAccessesOfGivenFlight:
 SELECT P.idPassport,P.firstName,P.lastName,access.timeAccess
